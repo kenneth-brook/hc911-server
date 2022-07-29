@@ -27,10 +27,7 @@ router.use((request, response, next) => {
     Db.getCalls().then((data) => {
       response.json(data[0]);
     })
-  })
-
-
-
+  });
 
 let port = process.env.PORT || 8080;
 app.listen(port);
