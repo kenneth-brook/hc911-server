@@ -10,6 +10,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.options('*', cors());
 app.use('/api', router);
+app.use(enforce.HTTPS({ trustProtoHeader: true }));
 
 router.use((request, response, next) => {
     console.log('middleware');
@@ -24,6 +25,7 @@ router.use((request, response, next) => {
 
 
   router.route('/calls').get((request, response) => {
+    
     Db.getCalls().then((data) => {
       response.json(data[0]);
     })
