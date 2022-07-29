@@ -16,6 +16,12 @@ router.use((request, response, next) => {
     next();
   });
 
+  app.all('/', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next()
+  });
+
 
   router.route('/calls').get((request, response) => {
     Db.getCalls().then((data) => {
