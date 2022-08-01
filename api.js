@@ -1,6 +1,5 @@
 const  Db = require('./dbopperations');
 const  express = require('express');
-const  HTTPS = require('HTTPS')
 const  bodyParser = require('body-parser');
 const  cors = require('cors');
 const  app = express();
