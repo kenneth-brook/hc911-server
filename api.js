@@ -1,4 +1,5 @@
 const  Db = require('./dbopperations');
+const  callsGet = require('./callsGet');
 const  express = require('express'); 
 const  bodyParser = require('body-parser');
 const  cors = require('cors');
@@ -10,6 +11,9 @@ app.use(bodyParser.json());
 app.use(cors());
 app.options('*', cors());
 app.use('/api', router);
+
+
+const timer = setInterval(callsGet, 30000);
 
 
 router.use((request, response, next) => {
