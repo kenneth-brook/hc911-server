@@ -1,10 +1,12 @@
+const  config = require('./dbconfig');
 const  Db = require('./dbopperations');
-const  callsGet = require('./callsGet');
 const  express = require('express'); 
 const  bodyParser = require('body-parser');
 const  cors = require('cors');
 const  app = express();
 const  router = express.Router();
+const  sql = require('mssql');
+
 
 app.use(bodyParser.urlencoded({ extended:  true }));
 app.use(bodyParser.json());
@@ -13,8 +15,18 @@ app.options('*', cors());
 app.use('/api', router);
 
 
-const timer = setInterval(callsGet, 30000);
+async function countPush() {
+  try {
+    let  callsPushPool = await  sql.connect(config);
+    let  callsPushCalls = await  callsPushPool.request().query("INSERT INTO count (id, creation, agency_type, jurisdiction) SELECT id, creation, agency_type, jurisdiction FROM active_incidents");
+    console.log("Check to see if it worked!!!!!!");
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
 
+const timer = setInterval(countPush, 600000);
 
 router.use((request, response, next) => {
     console.log('middleware');
@@ -27,7 +39,6 @@ router.use((request, response, next) => {
     next()
   });
 
-
   router.route('/calls').get((request, response) => {
     
     Db.getCalls().then((data) => {
@@ -38,3 +49,4 @@ router.use((request, response, next) => {
 let port = process.env.PORT || 8080;
 app.listen(port);
 console.log('call API is runnning at ' + port);
+

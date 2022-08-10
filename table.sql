@@ -1,6 +1,6 @@
 CREATE TABLE [dbo].[count]
 (
-    [id] INT NOT NULL UNIQUE,
+    [id] INT NOT NULL UNIQUE WITH (IGNORE_DUP_KEY = ON),
     [creation] DATETIME NULL,
     [agency_type] NVARCHAR(50) NULL,
     [jurisdiction] NVARCHAR(50) NULL,
