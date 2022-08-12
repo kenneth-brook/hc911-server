@@ -30,7 +30,6 @@ async function countPush() {
 const timer = setInterval(countPush, 600000);
 
 router.use((request, response, next) => {
-    console.log('middleware');
     next();
   });
 

@@ -5,7 +5,6 @@ async  function  getCount() {
     try {
       let  pool = await  sql.connect(config);
       let  count = await  pool.request().query("SELECT * from count WHERE YEAR(creation) = YEAR(GETDATE())");
-      console.log(count)
       return  count.recordsets;
       
     }
