@@ -1,5 +1,6 @@
 const  config = require('./dbconfig');
 const  Db = require('./dbopperations');
+const  CountDb = require('./CountDB');
 const  express = require('express'); 
 const  bodyParser = require('body-parser');
 const  cors = require('cors');
@@ -42,6 +43,13 @@ router.use((request, response, next) => {
   router.route('/calls').get((request, response) => {
     
     Db.getCalls().then((data) => {
+      response.json(data[0]);
+    })
+  });
+
+  router.route('/count').get((request, response) => {
+    
+    CountDb.getCount().then((data) => {
       response.json(data[0]);
     })
   });
