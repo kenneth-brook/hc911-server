@@ -53,7 +53,7 @@ router.use((request, response, next) => {
     })
   });
 
-let port = process.env.PORT || 8080;
+let port = 80;
 app.listen(port);
 console.log('call API is runnning at ' + port);
 
