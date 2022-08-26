@@ -8,6 +8,12 @@ const  app = express();
 const  router = express.Router();
 const  sql = require('mssql');
 const  https = require('https');
+const  fs = require('fs');
+
+const options = {
+  key: fs.readFileSync('./certs/private.key'),
+  cert: fs.readFileSync('./certs/certificate.crt')
+};
 
 
 app.use(bodyParser.urlencoded({ extended:  true }));
@@ -55,6 +61,9 @@ router.use((request, response, next) => {
   });
 
 let port = 8080;
-app.listen(port);
+https.createServer(options, function (req, res) {
+  res.writeHead(200);
+  res.end("hello world\n");
+}).listen(port);
 console.log('call API is runnning at ' + port);
 
