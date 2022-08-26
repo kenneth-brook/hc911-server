@@ -15,7 +15,6 @@ app.use(bodyParser.json());
 app.use(cors());
 app.options('*', cors());
 app.use('/api', router);
-app.use(https);
 
 
 async function countPush() {
