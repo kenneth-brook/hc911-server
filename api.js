@@ -33,11 +33,11 @@ router.use((request, response, next) => {
     next();
   });
 
-  app.all('/', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    next()
-  });
+  //app.all('/', function(req, res, next) {
+    //res.header("Access-Control-Allow-Origin", "*");
+    //res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    //next()
+  //});
 
   router.route('/calls').get((request, response) => {
     
@@ -53,7 +53,7 @@ router.use((request, response, next) => {
     })
   });
 
-let port = 80;
+let port = 8080;
 app.listen(port);
 console.log('call API is runnning at ' + port);
 
