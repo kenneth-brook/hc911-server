@@ -10,10 +10,10 @@ const  sql = require('mssql');
 const  https = require('https');
 const  fs = require('fs');
 
-const options = {
+const httpsServer = https.createServer({
   key: fs.readFileSync('./certs/private.key'),
   cert: fs.readFileSync('./certs/certificate.crt')
-};
+}, app);
 
 
 app.use(bodyParser.urlencoded({ extended:  true }));
@@ -61,9 +61,8 @@ router.use((request, response, next) => {
   });
 
 let port = 8080;
-https.createServer(options, function (req, res) {
-  res.writeHead(200);
-  res.end("hello world\n");
-}).listen(port);
+httpsServer.listen(port, () => {
+  console.log('HTTPS Server running on port 443');
+});
 console.log('call API is runnning at ' + port);
 
