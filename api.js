@@ -7,13 +7,6 @@ const  cors = require('cors');
 const  app = express();
 const  router = express.Router();
 const  sql = require('mssql');
-const  https = require('https');
-const  fs = require('fs');
-
-const httpsServer = https.createServer({
-  key: fs.readFileSync('certs/private.key'),
-  cert: fs.readFileSync('certs/certificate.crt')
-}, app);
 
 
 app.use(bodyParser.urlencoded({ extended:  true }));
@@ -40,11 +33,11 @@ router.use((request, response, next) => {
     next();
   });
 
-  //app.all('/', function(req, res, next) {
-    //res.header("Access-Control-Allow-Origin", "*");
-    //res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    //next()
-  //});
+  app.all('/', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next()
+  });
 
   router.route('/calls').get((request, response) => {
     
@@ -61,8 +54,6 @@ router.use((request, response, next) => {
   });
 
 let port = 8080;
-httpsServer.listen(port, () => {
-  console.log('HTTPS Server running on port 443');
-});
+app.listen(port);
 console.log('call API is runnning at ' + port);
 
