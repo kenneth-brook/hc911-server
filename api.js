@@ -11,9 +11,14 @@ const https = require('https');
 
 const fs = require("fs");
 
+const corsOptions = {
+  origin: 'https://911activeincidents.com',
+  optionsSuccessStatus: 200 // For legacy browser support
+}
 
-app.use(cors());
-app.options('*', cors());
+
+app.use(cors(corsOptions));
+//app.options('*', cors());
 app.use('/api', router);
 
 
