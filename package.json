@@ -23,7 +23,8 @@
     "cors": "^2.8.5",
     "express": "^4.18.1",
     "mssql": "^8.1.2",
-    "pm2": "^5.2.0"
+    "pm2": "^5.2.0",
+    "zerossl": "^1.1.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"
