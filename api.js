@@ -8,6 +8,19 @@ const  app = express();
 const  router = express.Router();
 const  sql = require('mssql');
 
+const fs = require('fs')
+const http = require('http')
+const https = require('https')
+
+const privateKey1 = fs.readFileSync('/etc/letsencrypt/live/hc911server.365dtm.com/privkey.pem', 'utf8');
+const certificate1 = fs.readFileSync('/etc/letsencrypt/live/hc911server.365dtm.com/cert.pem', 'utf8');
+const ca1 = fs.readFileSync('/etc/letsencrypt/live/hc911server.365dtm.com/chain.pem', 'utf8');
+const credentials1 = {
+	key: privateKey1,
+	cert: certificate1,
+	ca: ca1
+};
+
 
 app.use(bodyParser.urlencoded({ extended:  true }));
 app.use(bodyParser.json());
@@ -34,8 +47,8 @@ router.use((request, response, next) => {
   });
 
   app.all('/', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    //res.header("Access-Control-Allow-Origin", "*");
+    //res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next()
   });
 
@@ -53,7 +66,9 @@ router.use((request, response, next) => {
     })
   });
 
+  const httpsServer = https.createServer(credentials1, app);
+
 let port = 8675;
-app.listen(port);
+httpsServer.listen(port);
 console.log('call API is runnning at ' + port);
 
