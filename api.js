@@ -15,11 +15,11 @@ const fs = require("fs");
 	//const certdir = (await fs.readdir("/etc/letsencrypt/live"))[0];
 
 	//return {
-		key = fs.readFile(`certs/private.key`, (err, data) => {
+		key = fs.readFile(`/etc/letsencrypt/live/hc911server.365dtm.com/privkey.pem`, (err, data) => {
       if (err) throw err;
       console.log(data);
     });
-		cert = fs.readFile(`certs/certificate.crt`, (err, data) => {
+		cert = fs.readFile(`/etc/letsencrypt/live/hc911server.365dtm.com/fullchain.pem`, (err, data) => {
       if (err) throw err;
       console.log(data);
     });
