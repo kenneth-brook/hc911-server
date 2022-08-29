@@ -11,10 +11,7 @@ const https = require('https');
 const fs = require("fs");
 
 
-//const {key, cert} = await (async () => {
-	//const certdir = (await fs.readdir("/etc/letsencrypt/live"))[0];
 
-	//return {
 		let key = fs.readFile(`/etc/letsencrypt/live/hc911server.365dtm.com/privkey.pem`, (err, data) => {
       if (err) throw err;
       key = data;
@@ -25,8 +22,7 @@ const fs = require("fs");
       cert = data;
       console.log(data);
     });
-	//}
-//})();
+
 
 
 
@@ -51,9 +47,7 @@ router.route('/count').get((request, response) => {
   })
 });
 
-const httpsServer = https.createServer({key, cert}, app).listen(443, ()=>{
-  console.log(key, cert);
-})
+https.createServer({key, cert}, app).listen(443)
 
 
 async function countPush() {
