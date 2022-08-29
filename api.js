@@ -7,6 +7,18 @@ const  cors = require('cors');
 const  app = express();
 const  router = express.Router();
 const  sql = require('mssql');
+const fs = require('fs');
+const https = require('https');
+
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/hc911server.365dtm.com/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/hc911server.365dtm.com/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/hc911server.365dtm.com/chain.pem', 'utf8');
+
+const credentials = {
+	key: privateKey,
+	cert: certificate,
+	ca: ca
+};
 
 
 app.use(bodyParser.urlencoded({ extended:  true }));
@@ -52,8 +64,11 @@ router.use((request, response, next) => {
       response.json(data[0]);
     })
   });
-
+  
+  const httpsServer = https.createServer(credentials, app);
 let port = 8080;
-app.listen(port);
+httpsServer.listen(port, () => {
+	console.log('HTTPS Server running on port 443');
+});
 console.log('call API is runnning at ' + port);
 
