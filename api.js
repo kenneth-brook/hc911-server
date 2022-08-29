@@ -61,11 +61,11 @@ router.use((request, response, next) => {
     })
   });
 
-let port = 8443;
-https.createServer({
-  https_options
-}, app).listen(port);
-console.log('call API is runnning at ' + port);
+//let port = 8443;
+//https.createServer({
+  //https_options
+//}, app).listen(port);
+//console.log('call API is runnning at ' + port);
 
 let port2 = 8080;
 app.listen(port2);
