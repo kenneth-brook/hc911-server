@@ -5,15 +5,13 @@ const  sql = require('mssql');
 const express = require('express');
 const app = express();
 const  router = express.Router();
-const  bodyParser = require('body-parser');
 const  cors = require('cors');
 
 const https = require('https');
 
 const fs = require("fs");
 
-app.use(bodyParser.urlencoded({ extended:  true }));
-app.use(bodyParser.json());
+
 app.use(cors());
 app.options('*', cors());
 app.use('/api', router);
