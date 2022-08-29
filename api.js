@@ -17,8 +17,9 @@ const corsOptions = {
 }
 
 
-app.use(cors(corsOptions));
-app.options('*', cors());
+app.use(cors({
+  origin: '*'
+}));
 app.use('/api', router);
 
 
