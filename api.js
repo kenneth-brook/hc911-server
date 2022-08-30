@@ -1,15 +1,18 @@
 const  config = require('./dbconfig');
 const  Db = require('./dbopperations');
 const  CountDb = require('./CountDB');
-const  sql = require('mssql');
-const express = require('express');
-const app = express();
-const  router = express.Router();
+const  express = require('express'); 
+const  bodyParser = require('body-parser');
 const  cors = require('cors');
+const  app = express();
+const  router = express.Router();
+const  sql = require('mssql');
 
-app.use(cors({
-  origin: '*'
-}));
+
+app.use(bodyParser.urlencoded({ extended:  true }));
+app.use(bodyParser.json());
+app.use(cors());
+app.options('*', cors());
 app.use('/api', router);
 
 router.route('/calls').get((request, response) => {
