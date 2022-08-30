@@ -3,16 +3,19 @@ const  Db = require('./dbopperations');
 const  CountDb = require('./CountDB');
 const  express = require('express'); 
 const  bodyParser = require('body-parser');
-//const  cors = require('cors');
+const  cors = require('cors');
 const  app = express();
 const  router = express.Router();
 const  sql = require('mssql');
 
+var corsOptions = {
+  origin: '*',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
 
 app.use(bodyParser.urlencoded({ extended:  true }));
 app.use(bodyParser.json());
-//app.use(cors());
-//app.options('*', cors());
+app.use(cors(corsOptions));
 app.use('/api', router);
 
 router.route('/calls').get((request, response) => {
