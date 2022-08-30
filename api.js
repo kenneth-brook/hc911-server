@@ -29,7 +29,7 @@ app.use('/api', router);
       key = data;
       console.log(data);
     });
-		let cert = fs.readFile(`certs/ca_bundle.crt`, (err, data) => {
+		let cert = fs.readFile(`certs/certificate.crt`, (err, data) => {
       if (err) throw err;
       cert = data;
       console.log(data);
