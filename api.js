@@ -24,12 +24,12 @@ app.use('/api', router);
 
 
 
-		let key = fs.readFile(`/etc/letsencrypt/live/hc911server.365dtm.com/privkey.pem`, (err, data) => {
+		let key = fs.readFile(`certs/private.key`, (err, data) => {
       if (err) throw err;
       key = data;
       console.log(data);
     });
-		let cert = fs.readFile(`/etc/letsencrypt/live/hc911server.365dtm.com/fullchain.pem`, (err, data) => {
+		let cert = fs.readFile(`certs/certificate.crt`, (err, data) => {
       if (err) throw err;
       cert = data;
       console.log(data);
