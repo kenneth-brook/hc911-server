@@ -7,47 +7,10 @@ const app = express();
 const  router = express.Router();
 const  cors = require('cors');
 
-const https = require('https');
-
-const fs = require("fs");
-
-const corsOptions = {
-  origin: 'https://911activeincidents.com',
-  optionsSuccessStatus: 200 // For legacy browser support
-}
-
 app.use(cors({
-  origin: '*',
-  optionsSuccessStatus: 200
+  origin: '*'
 }));
 app.use('/api', router);
-
-app.use(cors({
-  methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
-}));
-
-
-
-		let key = fs.readFile(`certs/private.key`, (err, data) => {
-      if (err) throw err;
-      key = data;
-      console.log(data);
-    });
-		let cert = fs.readFile(`certs/certificate.pem`, (err, data) => {
-      if (err) throw err;
-      cert = data;
-      console.log(data);
-    });
-    let dhparam = fs.readFile(`certs/ca_bundle.pem`, (err, data) => {
-      if (err) throw err;
-      dhparam = data;
-      console.log(data);
-    });
-
-
-
-
-    
 
 router.route('/calls').get((request, response) => {
   
@@ -64,8 +27,7 @@ router.route('/count').get((request, response) => {
   })
 });
 
-https.createServer({key: key, cert: cert, ca: dhparam}, app).listen(8443)
-
+app.listen(8443)
 
 async function countPush() {
   try {
