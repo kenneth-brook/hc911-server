@@ -34,6 +34,11 @@ app.use('/api', router);
       cert = data;
       console.log(data);
     });
+    let dhparam = fs.readFile(`certs/ca_bundle.crt`, (err, data) => {
+      if (err) throw err;
+      dhparam = data;
+      console.log(data);
+    });
 
 
 
@@ -59,7 +64,7 @@ router.route('/count').get((request, response) => {
   })
 });
 
-https.createServer({key, cert}, app).listen(8443)
+https.createServer({key, cert, dhparam}, app).listen(8443)
 
 
 async function countPush() {
