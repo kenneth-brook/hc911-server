@@ -30,12 +30,12 @@ app.use('/api', router);
       key = data;
       console.log(data);
     });
-		let cert = fs.readFile(`certs/certificate.crt`, (err, data) => {
+		let cert = fs.readFile(`certs/certificate.pem`, (err, data) => {
       if (err) throw err;
       cert = data;
       console.log(data);
     });
-    let dhparam = fs.readFile(`certs/ca_bundle.crt`, (err, data) => {
+    let dhparam = fs.readFile(`certs/ca_bundle.pem`, (err, data) => {
       if (err) throw err;
       dhparam = data;
       console.log(data);
