@@ -8,18 +8,13 @@ const  app = express();
 const  router = express.Router();
 const  sql = require('mssql');
 
-var corsOptions = {
-  origin: "*",
-  methods: GET,HEAD,PUT,PATCH,POST,DELETE,
-  preflightContinue: false,
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-  credentials: true,
-  origin: true
-}
+
 
 app.use(bodyParser.urlencoded({ extended:  true }));
 app.use(bodyParser.json());
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: '*'
+}));
 app.use('/api', router);
 
 router.route('/calls').get((request, response) => {
