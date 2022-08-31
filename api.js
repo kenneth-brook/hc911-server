@@ -9,10 +9,12 @@ const  router = express.Router();
 const  sql = require('mssql');
 
 var corsOptions = {
-  "origin": "*",
-  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-  "preflightContinue": false,
-  "optionsSuccessStatus": 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  origin: "*",
+  methods: GET,HEAD,PUT,PATCH,POST,DELETE,
+  preflightContinue: false,
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  credentials: true,
+  origin: true
 }
 
 app.use(bodyParser.urlencoded({ extended:  true }));
