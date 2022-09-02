@@ -38,7 +38,7 @@ router.route('/count').get((request, response) => {
   })
 });
 
-app.listen(8443)
+app.listen(80)
 
 async function countPush() {
   try {
