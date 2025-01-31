@@ -13,14 +13,32 @@ const  sql = require('mssql');
 
 app.use(bodyParser.urlencoded({ extended:  true }));
 app.use(bodyParser.json());
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+app.use((req, res, next) => {
+  console.log("Incoming Request:");
+  console.log("Origin:", req.headers.origin);
+  console.log("Headers:", req.headers);
+
+  const allowedOrigins = ["https://www.hamiltontn911.gov"];
+  const origin = req.headers.origin;
+
+  if (origin && !allowedOrigins.includes(origin)) {
+      return res.status(403).json({ message: "Forbidden: Unauthorized origin" });
+  }
+
+  res.header("Access-Control-Allow-Origin", allowedOrigins.includes(origin) ? origin : "https://www.hamiltontn911.gov");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-  res.header("Pragma", "no-cache"); // HTTP 1.0.
-  res.header("Expires", "0"); // Proxies.
+  res.header("Cache-Control", "no-cache, no-store, must-revalidate");
+  res.header("Pragma", "no-cache");
+  res.header("Expires", "0");
   next();
 });
+const corsOptions = {
+  origin: "https://www.hamiltontn911.gov",
+  methods: "GET",
+  allowedHeaders: ["Content-Type", "Authorization"]
+};
+
+app.use(cors(corsOptions));
 app.use('/api', router);
 
 router.route('/calls').get((request, response) => {
