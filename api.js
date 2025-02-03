@@ -15,6 +15,8 @@ app.use(bodyParser.urlencoded({ extended:  true }));
 app.use(bodyParser.json());
 app.use((req, res, next) => {
   console.log("Incoming Request:");
+  const frontendAuth = req.headers["x-frontend-auth"] || req.headers["X-Frontend-Auth"];
+  console.log("Incoming Request - X-Frontend-Auth:", frontendAuth);
   console.log("Origin:", req.headers.origin);
   console.log("Headers:", req.headers);
 
