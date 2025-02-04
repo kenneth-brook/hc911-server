@@ -10,15 +10,28 @@ const  router = express.Router();
 const  sql = require('mssql');
 
 
+app.use((req, res, next) => {
+  // Bypass the check for /api/count if you want to allow it without the header
+  if (req.path.startsWith('/api/count')) {
+      return next();
+  }
+
+  // Check for the custom header (handle case differences)
+  const frontendAuth = req.headers["x-frontend-auth"] || req.headers["X-Frontend-Auth"];
+  console.log("Incoming Request - X-Frontend-Auth:", frontendAuth);
+  if (!frontendAuth || frontendAuth !== "my-secure-token") {
+      console.log("🚨 BLOCKED: Unauthorized request with missing or invalid auth token.");
+      return res.status(403).json({ message: "Forbidden: Missing or invalid auth token" });
+  }
+  next();
+});
+
+
 
 app.use(bodyParser.urlencoded({ extended:  true }));
 app.use(bodyParser.json());
 app.use((req, res, next) => {
-  console.log("Incoming Request:");
   const frontendAuth = req.headers["x-frontend-auth"] || req.headers["X-Frontend-Auth"];
-  console.log("Incoming Request - X-Frontend-Auth:", frontendAuth);
-  console.log("Origin:", req.headers.origin);
-  console.log("Headers:", req.headers);
 
   const allowedOrigins = ["https://www.hamiltontn911.gov"];
   const origin = req.headers.origin;
@@ -28,7 +41,7 @@ app.use((req, res, next) => {
   }
 
   res.header("Access-Control-Allow-Origin", allowedOrigins.includes(origin) ? origin : "https://www.hamiltontn911.gov");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-Frontend-Auth");
   res.header("Cache-Control", "no-cache, no-store, must-revalidate");
   res.header("Pragma", "no-cache");
   res.header("Expires", "0");
@@ -37,18 +50,19 @@ app.use((req, res, next) => {
 const corsOptions = {
   origin: "https://www.hamiltontn911.gov",
   methods: "GET",
-  allowedHeaders: ["Content-Type", "Authorization"]
+  allowedHeaders: ["Content-Type", "Authorization", "X-Frontend-Auth"]
 };
 
 app.use(cors(corsOptions));
 app.use('/api', router);
 
 router.route('/calls').get((request, response) => {
-  
   Db.getCalls().then((data) => {
-    response.json(data[0]);
-  })
-  
+      response.json(data[0]);
+  }).catch((error) => {
+      console.error("Error fetching /calls:", error);
+      response.status(500).json({ message: "Internal Server Error" });
+  });
 });
 
 let lastRan = null;
