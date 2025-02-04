@@ -56,13 +56,44 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use('/api', router);
 
-router.route('/calls').get((request, response) => {
-  Db.getCalls().then((data) => {
-      response.json(data[0]);
-  }).catch((error) => {
+router.route('/calls').get((req, res) => {
+  Db.getCalls()
+    .then((data) => {
+      // Assume data[0] is the array of call records.
+      let calls = data[0];
+
+      // Step 1: Filter out any record with type "PERBURN"
+      calls = calls.filter(record => record.type !== "PERBURN");
+
+      // Step 2: Define the list of types that should be replaced with "EMS CALL"
+      const emsTypes = [
+        "ABDPN", "INJURY", "AWOBST", "ALAMED", "ALLERGIC", "AMPU", "ANSBT",
+        "BABY", "BACKPN", "BLEEDING", "BURN", "CARARR", "CHESTPN", "CPR",
+        "DIABET", "DIFFBR", "DROWN", "DRUGOD", "ELESH", "EXPOSURE", "EYEINJ",
+        "FALL", "HEADPN", "HEART", "FALLHI", "MACHINERY", "INGEST", "INHAL",
+        "PREG", "PSYCH", "SEIZE", "SICK", "STROKE", "TRAUMA", "UNCONC", "UNKMED"
+      ];
+
+      // Step 3: Update the type field and type_description field based on the conditions:
+      calls = calls.map(record => {
+        if (emsTypes.includes(record.type)) {
+          // Change both fields to "EMS CALL"
+          record.type = "EMS CALL";
+          record.type_description = "EMS CALL";
+        } else {
+          // If not an EMS type, use the original type_description for type.
+          record.type = record.type_description;
+        }
+        return record;
+      });
+
+      // Return the processed call records
+      res.json(calls);
+    })
+    .catch(error => {
       console.error("Error fetching /calls:", error);
-      response.status(500).json({ message: "Internal Server Error" });
-  });
+      res.status(500).json({ message: "Internal Server Error" });
+    });
 });
 
 let lastRan = null;
