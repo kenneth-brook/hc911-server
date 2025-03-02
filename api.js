@@ -65,10 +65,7 @@ router.route('/calls').get((req, res) => {
       // Step 1: Filter out any record with type "PERBURN"
       const excludedTypes = ["PERBURN", "EOC Activation"];
 
-      calls = calls.filter(record => 
-          !excludedTypes.includes(record.type) && 
-          !excludedTypes.some(excluded => record.description?.includes(excluded))
-      );
+      calls = calls.filter(record => !excludedTypes.includes(record.type));
 
       // Step 2: Define the list of types that should be replaced with "EMS CALL"
       const emsTypes = [
