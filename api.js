@@ -56,40 +56,45 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use('/api', router);
 
+const excludedTypes = ["PERBURN", "EOC Activation"];
+const emsTypes = [
+  "ABDPN", "INJURY", "AWOBST", "ALAMED", "ALLERGIC", "AMPU", "ANSBT",
+  "BABY", "BACKPN", "BLEEDING", "BURN", "CARARR", "CHESTPN", "CPR",
+  "DIABET", "DIFFBR", "DROWN", "DRUGOD", "ELESH", "EXPOSURE", "EYEINJ",
+  "FALL", "HEADPN", "HEART", "FALLHI", "MACHINERY", "INGEST", "INHAL",
+  "PREG", "PSYCH", "SEIZE", "SICK", "STROKE", "TRAUMA", "UNCONC", "UNKMED"
+];
+
 router.route('/calls').get((req, res) => {
   Db.getCalls()
     .then((data) => {
-      // Assume data[0] is the array of call records.
       let calls = data[0];
 
-      // Step 1: Filter out any record with type "PERBURN"
-      const excludedTypes = ["PERBURN", "EOC Activation"];
+      // Debug: Check what values exist in the dataset
+      console.log("Before Filtering:", calls.map(r => r.type));
 
-      calls = calls.filter(record => !excludedTypes.includes(record.type));
+      // Filter out unwanted types
+      calls = calls.filter(record => 
+        !excludedTypes.some(excluded => 
+          record.type?.toLowerCase() === excluded.toLowerCase() || 
+          record.type_description?.toLowerCase() === excluded.toLowerCase()
+        )
+      );
 
-      // Step 2: Define the list of types that should be replaced with "EMS CALL"
-      const emsTypes = [
-        "ABDPN", "INJURY", "AWOBST", "ALAMED", "ALLERGIC", "AMPU", "ANSBT",
-        "BABY", "BACKPN", "BLEEDING", "BURN", "CARARR", "CHESTPN", "CPR",
-        "DIABET", "DIFFBR", "DROWN", "DRUGOD", "ELESH", "EXPOSURE", "EYEINJ",
-        "FALL", "HEADPN", "HEART", "FALLHI", "MACHINERY", "INGEST", "INHAL",
-        "PREG", "PSYCH", "SEIZE", "SICK", "STROKE", "TRAUMA", "UNCONC", "UNKMED"
-      ];
+      // Debug: Check after filtering
+      console.log("After Filtering:", calls.map(r => r.type));
 
-      // Step 3: Update the type field and type_description field based on the conditions:
+      // Map EMS types to "EMS CALL"
       calls = calls.map(record => {
         if (emsTypes.includes(record.type)) {
-          // Change both fields to "EMS CALL"
           record.type = "EMS CALL";
           record.type_description = "EMS CALL";
         } else {
-          // If not an EMS type, use the original type_description for type.
           record.type = record.type_description;
         }
         return record;
       });
 
-      // Return the processed call records
       res.json(calls);
     })
     .catch(error => {
@@ -97,6 +102,7 @@ router.route('/calls').get((req, res) => {
       res.status(500).json({ message: "Internal Server Error" });
     });
 });
+
 
 let lastRan = null;
 let builtCount = [];
