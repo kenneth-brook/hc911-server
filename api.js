@@ -9,7 +9,6 @@ const  app = express();
 const  router = express.Router();
 const  sql = require('mssql');
 
-
 app.use((req, res, next) => {
   // Bypass the check for /api/count if you want to allow it without the header
   if (req.path.startsWith('/api/count')) {
@@ -25,8 +24,6 @@ app.use((req, res, next) => {
   }
   next();
 });
-
-
 
 app.use(bodyParser.urlencoded({ extended:  true }));
 app.use(bodyParser.json());
@@ -81,10 +78,6 @@ router.route('/calls').get((req, res) => {
         )
       );
 
-      // Debug: Check after filtering
-      console.log("After Filtering:", calls.map(r => r.type));
-
-      // Map EMS types to "EMS CALL"
       calls = calls.map(record => {
         if (emsTypes.includes(record.type)) {
           record.type = "EMS CALL";
@@ -102,7 +95,6 @@ router.route('/calls').get((req, res) => {
       res.status(500).json({ message: "Internal Server Error" });
     });
 });
-
 
 let lastRan = null;
 let builtCount = [];
@@ -140,5 +132,3 @@ async function countPush() {
 }
 
 const timer = setInterval(countPush, 600000);
-
-
