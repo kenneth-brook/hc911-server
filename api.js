@@ -17,7 +17,6 @@ app.use((req, res, next) => {
 
   // Check for the custom header (handle case differences)
   const frontendAuth = req.headers["x-frontend-auth"] || req.headers["X-Frontend-Auth"];
-  console.log("Incoming Request - X-Frontend-Auth:", frontendAuth);
   if (!frontendAuth || frontendAuth !== "my-secure-token") {
       console.log("🚨 BLOCKED: Unauthorized request with missing or invalid auth token.");
       return res.status(403).json({ message: "Forbidden: Missing or invalid auth token" });
@@ -66,11 +65,6 @@ router.route('/calls').get((req, res) => {
   Db.getCalls()
     .then((data) => {
       let calls = data[0];
-
-      // Debug: Check what values exist in the dataset
-      console.log("Before Filtering:", calls.map(r => r.type));
-
-      // Filter out unwanted types
       calls = calls.filter(record => 
         !excludedTypes.some(excluded => 
           record.type?.toLowerCase() === excluded.toLowerCase() || 
